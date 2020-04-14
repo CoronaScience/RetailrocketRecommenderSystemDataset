@@ -1,0 +1,26 @@
+session_name: "spark"
+
+input:
+    sources:
+      - type: 'csv'
+        csv_path: '/home/patrizio/Documentos/datos/events.csv'
+        name: 'events'
+        label: 'events'
+        delimiter: ','
+
+transformations:
+    - type: "select"
+      attributes: {
+        cols: ['timestamp', 'event']
+      }
+
+
+output:
+  -   type: 'csv'
+      name: "test"
+      path: "/home/patrizio/PycharmProjects/recommendator/src/main/resource"
+      transformations:
+        - type: "sort_by"
+          attributes: {
+            column: "timestamp"
+          }

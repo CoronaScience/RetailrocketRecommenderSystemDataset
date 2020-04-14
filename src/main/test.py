@@ -1,4 +1,4 @@
-from wqklmdlkwq import Process
+from pyspark_config.main.process.process import Process
 
-config=""
-Process(config).output
+config="/home/patrizio/PycharmProjects/recommendator/src/main/resource/config_test.yaml"
+Process(config, "hola").output
