@@ -1,0 +1,9 @@
+[submodule "git"]
+	path = git
+	url = https://github.com/Patrizio1301/pyspark-config.git
+[submodule "pull"]
+	path = pull
+	url = https://github.com/Patrizio1301/pyspark-config.git
+[submodule "pyspark_config"]
+	path = pyspark_config
+	url = https://github.com/Patrizio1301/pyspark-config.git
