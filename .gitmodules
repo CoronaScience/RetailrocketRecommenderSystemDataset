@@ -1,3 +1,6 @@
 [submodule "pyspark_config"]
 	path = pyspark_config
 	url = https://github.com/Patrizio1301/pyspark-config.git
+[submodule "pyspark_configs"]
+	path = pyspark_configs
+	url = https://github.com/Patrizio1301/pyspark-config.git
