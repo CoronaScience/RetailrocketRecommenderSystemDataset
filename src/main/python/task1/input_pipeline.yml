@@ -8,8 +8,8 @@ input:
         delimiter: ','
 
 transformations:
-    - type: "Select"
-      cols: ['timestamp', 'event']
+    - type: "Filter"
+      sql_condition: "event='view'"
 
 
 output:

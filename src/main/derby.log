@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Thu May 07 11:11:24 CEST 2020:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0171-ee67-6097-0000142d2938 
+on database directory C:\Users\a.camarero.sierra\Documents\Projects\VARIOS\RetailrocketRecommenderSystemDataset\src\main\metastore_db with class loader org.apache.spark.sql.hive.client.IsolatedClientLoader$$anon$1@5ecde8c3 
+Loaded from file:/C:/spark/jars/derby-10.12.1.1.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_241-b07
+user.dir=C:\Users\a.camarero.sierra\Documents\Projects\VARIOS\RetailrocketRecommenderSystemDataset\src\main
+os.name=Windows 10
+os.arch=amd64
+os.version=10.0
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
