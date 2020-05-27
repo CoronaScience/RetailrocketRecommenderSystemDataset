@@ -4,6 +4,7 @@ import pathlib
 from petastorm import make_batch_reader
 from petastorm.tf_utils import make_petastorm_dataset
 from pyspark_config import Config
+import tensorflow as tf
 
 
 class Input(object):
@@ -16,32 +17,36 @@ class Input(object):
     @staticmethod
     def get_dataset(path, shuffle, batch):
         path_='file:/'+path
+
+        def make_window_dataset(ds, window_size=64, shift=64, stride=1):
+            windows = ds.window(window_size, shift=shift, stride=stride)
+
+            def sub_to_batch(sub):
+                return sub.batch(window_size, drop_remainder=True)
+
+            windows = windows.flat_map(sub_to_batch)
+            return windows
+
+        def create_dataset(tensor):
+            return tf.data.Dataset.from_tensor_slices(tensor)
+
+        def lam(x):
+            return x
+
         with make_batch_reader(path_, num_epochs=1) as reader:
             train_dataset = make_petastorm_dataset(reader).map(lambda x: x.item_list).unbatch()
 
-            feature_length = 10
-            label_length = 5
+            windows_flat = train_dataset.map(lambda x: make_window_dataset(create_dataset(x)))
 
-            range_ds = tf.data.Dataset.range(100000)
-
-            def dense_1_step(batch):
-                # Shift features and labels one step relative to each other.
-                return batch[:-1], batch[1:]
-
-            predict_dense_1_step = train_dataset.map(dense_1_step)
-
-            for features, label in predict_dense_1_step.take(3):
-                print(features.numpy(), " => ", label.numpy())
-
-            for x in train_dataset:
+            for x in windows_flat.flat_map(lambda x: x):
                 print(x)
 
 print("\nIf you mean the current working directory:\n")
-print(str(pathlib.Path().absolute()).replace("\\","/").replace("C:/","//")+"/Output/test.parquet")
+print(str(pathlib.Path().absolute()).replace("\\","/").replace("C:/","//").replace("/home","///home")+"/Output/test.parquet")
 
 
 
-petastorm_dataset_url = str(pathlib.Path().absolute()).replace("\\","/").replace("C:/","//")+"/Output/test.parquet"
+petastorm_dataset_url = str(pathlib.Path().absolute()).replace("\\","/").replace("C:/","//").replace("/home","//home")+"/Output/test.parquet"
 
 #Input.config_load("input_pipeline.yaml")
 Input.get_dataset(petastorm_dataset_url, shuffle=100, batch=2)
