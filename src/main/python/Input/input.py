@@ -30,15 +30,11 @@ class Input(object):
         def create_dataset(tensor):
             return tf.data.Dataset.from_tensor_slices(tensor)
 
-        def lam(x):
-            return x
-
         with make_batch_reader(path_, num_epochs=1) as reader:
             train_dataset = make_petastorm_dataset(reader).map(lambda x: x.item_list).unbatch()
+            windows = train_dataset.map(lambda x: make_window_dataset(create_dataset(x))).flat_map(lambda x: x)
 
-            windows_flat = train_dataset.map(lambda x: make_window_dataset(create_dataset(x)))
-
-            for x in windows_flat.flat_map(lambda x: x):
+            for x in windows:
                 print(x)
 
 print("\nIf you mean the current working directory:\n")
