@@ -15,9 +15,7 @@ class Input(object):
         conf.apply()
 
     @staticmethod
-    def get_dataset(path, shuffle, batch):
-        path_='file:/'+path
-
+    def get_dataset(reader, shuffle, batch):
         def make_window_dataset(ds, window_size=64, shift=64, stride=1):
             windows = ds.window(window_size, shift=shift, stride=stride)
 
@@ -28,22 +26,27 @@ class Input(object):
             return windows
 
         def create_dataset(tensor):
-            return tf.data.Dataset.from_tensor_slices(tensor)
+            concat=tf.concat([tensor, tf.constant( [0.])],0)
+            return (make_window_dataset(tf.data.Dataset.from_tensor_slices(tensor)),
+                    make_window_dataset(tf.data.Dataset.from_tensor_slices(concat[1:])))
 
-        with make_batch_reader(path_, num_epochs=1) as reader:
-            train_dataset = make_petastorm_dataset(reader).map(lambda x: x.item_list).unbatch()
-            windows = train_dataset.map(lambda x: make_window_dataset(create_dataset(x))).flat_map(lambda x: x)
+        def func(x,y):
+            return tf.data.Dataset.zip((x,y))
 
-            for x in windows:
-                print(x)
+        features = make_petastorm_dataset(reader).map(lambda x: x.item_list).unbatch()
+        features_windows = features.map(create_dataset).flat_map(func)
+        return features_windows.shuffle(shuffle).batch(batch)
 
 print("\nIf you mean the current working directory:\n")
 print(str(pathlib.Path().absolute()).replace("\\","/").replace("C:/","//").replace("/home","///home")+"/Output/test.parquet")
 
-
-
 petastorm_dataset_url = str(pathlib.Path().absolute()).replace("\\","/").replace("C:/","//").replace("/home","//home")+"/Output/test.parquet"
 
 #Input.config_load("input_pipeline.yaml")
-Input.get_dataset(petastorm_dataset_url, shuffle=100, batch=2)
+path_= 'file:/'+petastorm_dataset_url
+with make_batch_reader(path_, num_epochs=1) as reader:
+    ds=Input.get_dataset(reader, shuffle=100, batch=1)
 
+    for x, y in ds:
+        print("input:",x, '\n')
+        print("output:", y, '\n')
