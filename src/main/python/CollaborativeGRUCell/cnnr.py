@@ -7,6 +7,7 @@ import six.moves
 import tensorflow as tf
 import time
 from math import sqrt
+import fasttext
 
 
 from src.main.python.CollaborativeGRUCell.cell import CollaborativeGRUCell
@@ -168,8 +169,8 @@ def run_epoch(session, train_model, valid_model, train_iter, valid_iter,
 
 def main(args):
     # Read (and optionally, truncate) the training and validation data.
-    train_path="/home/patrizio/PycharmProjects/RetailrocketRecommenderSystemDataset/src/main/python/CollaborativeGRUCell/fakedata-train.txt"
-    valid_path="/home/patrizio/PycharmProjects/RetailrocketRecommenderSystemDataset/src/main/python/CollaborativeGRUCell/fakedata-valid.txt"
+    train_path="/home/patrizio/PycharmProjects/RetailrocketRecommenderSystemDataset/src/main/python/input/data/fakedata-train.txt"
+    valid_path="/home/patrizio/PycharmProjects/RetailrocketRecommenderSystemDataset/src/main/python/input/data/fakedata-valid.txt"
     train_data = Dataset.from_path(train_path)
     if args.max_train_chunks is not None:
         size = args.max_train_chunks * args.chunk_size

@@ -1,0 +1,38 @@
+
+input:
+    sources:
+      - type: 'Csv'
+        csv_path: 'data/fakedata-train.csv'
+        name: 'events'
+        label: 'events'
+        delimiter: ','
+        header: True
+
+transformations:
+    - type: "Cast"
+      col: "user"
+      castedCol: "user"
+      fromType: "string"
+      toType: "float"
+
+    - type: "Cast"
+      col: "item"
+      castedCol: "item"
+      fromType: "string"
+      toType: "float"
+
+    - type: "Cast"
+      col: "date"
+      castedCol: "date"
+      fromType: "string"
+      toType: "float"
+
+    - type: "CollectList"
+      orderBy: ["date"]
+      groupBy: ["user"]
+      cols: ["item", "user"]
+
+output:
+  -   type: 'Parquet'
+      name: "train_data"
+      path: "data/train"
