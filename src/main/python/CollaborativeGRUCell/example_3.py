@@ -127,7 +127,7 @@ with make_batch_reader(train_path, num_epochs=None) as reader_train:
         test_dataset = Input.get_dataset(reader_validation, shuffle=10, batch=5)
 
         model = CollaborativeRNNModel(num_users, num_items, is_training=True, seq_length=64, **settings)
-        model.compile(loss=tf.losses.sparse_categorical_crossentropy, optimizer=tf.optimizers.RMSprop(lr=0.001),
+        model.compile(loss=tf.losses.sparse_categorical_crossentropy, optimizer=tf.optimizers.RMSprop(lr=0.005),
                       metrics=['sparse_categorical_accuracy'])
 
         model.fit(train_dataset, epochs=100, steps_per_epoch=40, validation_data=test_dataset, validation_steps=10,verbose=2)
