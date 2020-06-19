@@ -29,7 +29,7 @@ class Input(object):
             features_= tf.data.Dataset.from_tensor_slices(tf.reshape(features, shape=[128, 2]))
             label_ = tf.concat([label, tf.constant([0.])], 0)
             return (make_window_dataset(features_),
-                    make_window_dataset(tf.data.Dataset.from_tensor_slices(label_)))
+                    make_window_dataset(tf.data.Dataset.from_tensor_slices(label_[1:])))
 
         def func(x,y):
             return tf.data.Dataset.zip((x,y))

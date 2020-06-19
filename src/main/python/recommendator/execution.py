@@ -2,7 +2,7 @@ import pathlib
 import json
 
 from recommendator.CollaborativeGRUCell.model import CollaborativeRNNModel, CollaborativeRNN2RecConfig
-from recommendator.CollaborativeGRUCell.training import fit_
+from recommendator.CollaborativeGRUCell.training_ver1 import fit_
 
 config_data = {
     'user_size': 5,

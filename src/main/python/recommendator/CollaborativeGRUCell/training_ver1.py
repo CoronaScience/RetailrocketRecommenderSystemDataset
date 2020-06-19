@@ -145,9 +145,9 @@ def train_step(model, optimizer, features, targets):
         pred = model(features)
         loss = tf.keras.losses.sparse_categorical_crossentropy(targets, pred)
 
+    grads = tape.gradient(loss, model.trainable_variables)
     # calculate the gradients using our tape and then update the
     # model weights
-    grads = tape.gradient(loss, model.trainable_variables)
     optimizer.apply_gradients(zip(grads, model.trainable_variables))
     return loss
 
@@ -178,12 +178,15 @@ def training(epochs):
             train_loss_results.append(epoch_loss_avg.result())
             train_accuracy_results.append(epoch_accuracy.result())
 
-            print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", epoch)
+            tf.print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", epoch)
 
             if epoch % 2 == 0:
-                print("Epoch {:03d}: Loss: {:.3f}, Accuracy: {:.3%}".format(epoch,
+                tf.print("Epoch {:03d}: Loss: {:.3f}, Accuracy: {:.3%}".format(epoch,
                                                                             epoch_loss_avg.result(),
                                                                             epoch_accuracy.result()))
+optimizer=create_optimizer(
+        init_lr=0.035,
+        num_train_steps=100)
 
 
 def training2(epochs, num_of_iters):
@@ -250,22 +253,19 @@ train_config_data={
     'shuffle' : 10,
     'steps_per_epoch' : 40,
     'validation_steps' : 10,
-    'lr' : 0.001,
+    'lr' : 0.05,
     'verbose' : 2
 }
 
 config=CollaborativeRNN2RecConfig.from_dict(config_data)
 model=CollaborativeRNNModel(config=config)
-optimizer=create_optimizer(
-        init_lr=0.004,
-        num_train_steps=100)
 
 # Keep results for plotting
 train_loss_results = []
 train_accuracy_results = []
 
 
-training2(100, 40)
+training2(tf.constant(100, tf.int64), tf.constant(2, tf.int64))
 
 
 

@@ -33,6 +33,6 @@ transformations:
       cols: ["item", "user"]
 
 output:
-  -   type: 'Parquet'
+  -   type: 'TFRecord'
       name: "train_data"
       path: "data/train"
